@@ -3,7 +3,6 @@ kind: Secret
 metadata:
   name: mongodb
   labels:
-    {{- include "movies.labels" . | nindent 4 }}
     app.kubernetes.io/component: mongodb
 type: Opaque
 data:
@@ -15,7 +14,6 @@ kind: Service
 metadata:
   name: mongodb
   labels:
-    {{- include "sigo.labels" . | nindent 4 }}
     app.kubernetes.io/component: mongodb
 spec:
   type: ClusterIP
@@ -33,7 +31,6 @@ kind: StatefulSet
 metadata:
   name: mongodb
   labels:
-    {{- include "sigo.labels" . | nindent 4 }}
     app.kubernetes.io/component: mongodb
 spec:
   serviceName: mongodb
