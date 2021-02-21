@@ -1,18 +1,11 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mongodb
-  labels:
-    app.kubernetes.io/component: mongodb
-    {{- include "movies.labels" . | nindent 4 }}
+  name: k8-training
 type: Opaque
 data:
-  mongodb-root-password: {{ randAlphaNum 10 | b64enc | quote }}
-  {{- if .Values.mongodb.password }}
-  mongodb-password:  {{ .Values.mongodb.password | b64enc | quote }}
-  {{- else }}
-  mongodb-password: {{ randAlphaNum 10 | b64enc | quote }}
-  {{- end }}
+  MONGO_ROOT_USERNAME: YWRtaW4K
+  MONGO_ROOT_PASSWORD: cGFzc3dvcmQK
 ---
 apiVersion: v1
 kind: Service
