@@ -2,8 +2,6 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: mongodb
-  labels:
-    app.kubernetes.io/component: mongodb
 type: Opaque
 data:
   mongodb-root-password: {{ randAlphaNum 10 | b64enc | quote }}
@@ -17,8 +15,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb
-  labels:
-    app.kubernetes.io/component: mongodb
 spec:
   type: ClusterIP
   ports:
@@ -34,8 +30,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb
-  labels:
-    app.kubernetes.io/component: mongodb
 spec:
   serviceName: mongodb
   replicas: 1
