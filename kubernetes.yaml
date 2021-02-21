@@ -4,7 +4,6 @@ metadata:
   name: mongodb
   labels:
     app.kubernetes.io/component: mongodb
-    {{- include "sigo.labels" . | nindent 4 }}
 type: Opaque
 data:
   mongodb-root-password: qOXnBsermRl0
