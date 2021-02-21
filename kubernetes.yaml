@@ -4,8 +4,8 @@ metadata:
   name: mongodb
 type: Opaque
 data:
-  mongodb-root-password: *oJaS!3!PHRa
-  mongodb-password: Vf$K5h#ijLG2
+  mongodb-root-password: qOXnBsermRl0
+  mongodb-password: BgDyHZZbBEgI
 ---
 apiVersion: v1
 kind: Service
