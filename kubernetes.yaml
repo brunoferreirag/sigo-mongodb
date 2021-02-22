@@ -42,6 +42,8 @@ data:
       .split(';')
       .map(s => s.split(':'))
       .forEach(user => {
+        print(user);
+
         const username = user[0];
         const rolesStr = user[1];
         const password = user[2];
