@@ -83,8 +83,9 @@ spec:
         resources:
           {}
       volumes:
-      - name: data
-        emptyDir: {}
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongodb
 ---     
 apiVersion: v1
 kind: Service
