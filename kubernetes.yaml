@@ -44,10 +44,8 @@ spec:
           items:
           - key: MONGO_ROOT_USERNAME
             path: admin/MONGO_ROOT_USERNAME
-            mode: 0444
           - key: MONGO_ROOT_PASSWORD
             path: admin/MONGO_ROOT_PASSWORD
-            mode: 0444
 ---
 apiVersion: v1
 kind: Service
