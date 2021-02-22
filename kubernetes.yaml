@@ -11,71 +11,6 @@ data:
   MONGO_PASSWORD: cGFzc3dvcmQK
   MONGO_USERS_LIST: c2lnby1tb25nbzpjR0Z6YzNkdmNtUUs6YWRtaW47c2lnby1tb25nbzI6Y0dGemMzZHZjbVFLOmFkbWlu
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: sigo-mongo
-data:
-  ensure-users.js: |
-    const targetDbStr = 'gestao-norma-industrial';
-    const rootUser = cat('/etc/sigo-mongo/admin/MONGO_ROOT_USERNAME');
-    const rootPass = cat('/etc/sigo-mongo/admin/MONGO_ROOT_PASSWORD');
-    const usersStr = cat('/etc/sigo-mongo/MONGO_USERS_LIST');
-
-    // auth against admin
-    const adminDb = db.getSiblingDB('admin');
-    adminDb.auth(rootUser, rootPass);
-    print('Successfully authenticated admin user');
-
-    // we'll create the users here
-    const targetDb = db.getSiblingDB(targetDbStr);
-
-    // user-defined roles should be stored in the admin db
-    const customRoles = adminDb
-      .getRoles({rolesInfo: 1, showBuiltinRoles: false})
-      .map(role => role.role)
-      .filter(Boolean);
-
-    // parse the list of users, and create each user as needed
-    usersStr
-      .trim()
-      .split(';')
-      .map(s => s.split(':'))
-      .forEach(user => {
-        print('passou aqui');
-
-        const username = user[0];
-        const rolesStr = user[1];
-        const password = user[2];
-
-        if (!rolesStr || !password) {
-          return;
-        }
-
-        const roles = rolesStr.split(',');
-        const userDoc = {
-          user: username,
-          pwd: password,
-        };
-
-        userDoc.roles = roles.map(role => {
-          if (!~customRoles.indexOf(role)) {
-            // is this a user defined role?
-            return role; // no, it is built-in, just use the role name
-          }
-          return {role: role, db: 'admin'}; // yes, user-defined, specify the long format
-        });
-
-        try {
-          targetDb.createUser(userDoc);
-        } catch (err) {
-          if (!~err.message.toLowerCase().indexOf('duplicate')) {
-            // if not a duplicate user
-            throw err; // rethrow
-          }
-        }
-      });
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -130,21 +65,12 @@ spec:
           - key: MONGO_USERS_LIST
             path: MONGO_USERS_LIST
             mode: 0444
-      - name: mongodb-scripts
-        configMap:
-          name: mongodb-standalone
-          items:
-          - key: ensure-users.js
-            path: ensure-users.js
       - name: mongodb-conf
         configMap:
           name: mongodb-standalone
           items:
           - key: mongo.conf
             path: mongo.conf
-      - name: mongodb-data
-        persistentVolumeClaim:
-          claimName: sigo-mongo
 ---
 apiVersion: v1
 kind: Service
