@@ -77,14 +77,6 @@ data:
       });
 ---
 apiVersion: v1
-kind: StorageClass
-metadata:
-  name: sigo-mongo
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
-allowVolumeExpansion: true
----
-apiVersion: v1
 kind: PersistentVolume
 metadata:
     name: sigo-mongo
@@ -95,7 +87,6 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: mongodb-standalone
   local:
     path: /sigo-mongo
   nodeAffinity:
