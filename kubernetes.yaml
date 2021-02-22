@@ -1,23 +1,33 @@
 ---
 apiVersion: v1
-kind: Secret
-metadata:
-  name: sigo-mongo
-type: Opaque
-data:
-  MONGO_ROOT_USERNAME: YWRtaW4K
-  MONGO_ROOT_PASSWORD: cGFzc3dvcmQK
-  MONGO_USERNAME: dHJhaW5pbmcK
-  MONGO_PASSWORD: cGFzc3dvcmQK
-  MONGO_USERS_LIST: c2lnby1tb25nbzpjR0Z6YzNkdmNtUUs6YWRtaW47c2lnby1tb25nbzI6Y0dGemMzZHZjbVFLOmFkbWlu
----
-apiVersion: apps/v1
-kind: StatefulSet
+kind: PersistentVolume
 metadata:
   name: sigo-mongo
 spec:
-  serviceName: sigo-mongo
-  replicas: 1
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /tmp/db
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sigo-mongo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sigo-mongo
+spec:
   selector:
     matchLabels:
       app: sigo-mongo
@@ -25,46 +35,29 @@ spec:
     metadata:
       labels:
         app: sigo-mongo
-        selector: sigo-mongo
     spec:
       containers:
-      - name: sigo-mongo
-        image: mongo:4.0.8
-        env:
-          - name: MONGO_INITDB_ROOT_USERNAME_FILE
-            value: /etc/sigo-mongo/admin/MONGO_ROOT_USERNAME
-          - name: MONGO_INITDB_ROOT_PASSWORD_FILE
-            value: /etc/sigo-mongo/admin/MONGO_ROOT_PASSWORD
-        volumeMounts:
         - name: sigo-mongo
-          mountPath: /etc/sigo-mongo
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
       volumes:
-      - name: sigo-mongo
-        secret:
-          secretName: sigo-mongo
-          items:
-          - key: MONGO_ROOT_USERNAME
-            path: admin/MONGO_ROOT_USERNAME
-          - key: MONGO_ROOT_PASSWORD
-            path: admin/MONGO_ROOT_PASSWORD
-           - key: MONGO_USERNAME
-            path: MONGO_USERNAME
-            mode: 0444
-          - key: MONGO_PASSWORD
-            path: MONGO_PASSWORD
-            mode: 0444
-          - key: MONGO_USERS_LIST
-            path: MONGO_USERS_LIST
-            mode: 0444
+        - name: storage
+          persistentVolumeClaim:
+            claimName: sigo-mongo
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: sigo-mongo
-  labels:
-    app: sigo-mongo
 spec:
-  clusterIP: None
   selector:
     app: sigo-mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
 ---
+
