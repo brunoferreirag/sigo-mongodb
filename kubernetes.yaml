@@ -77,7 +77,7 @@ data:
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: mongodb-standalone
+  name: sigo-mongo
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
@@ -85,7 +85,7 @@ allowVolumeExpansion: true
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-    name: mongodb-standalone
+    name: sigo-mongo
 spec:
   capacity:
     storage: 1Gi
@@ -147,6 +147,14 @@ spec:
         - name: sigo-mongo
           mountPath: /etc/sigo-mongo
           readOnly: true
+        - name: mongodb-scripts
+          mountPath: /docker-entrypoint-initdb.d
+          readOnly: true
+        - name: mongodb-conf
+          mountPath: /config
+          readOnly: true
+        - name: mongodb-data
+          mountPath: /data/db
       volumes:
       - name: sigo-mongo
         secret:
@@ -156,6 +164,30 @@ spec:
             path: admin/MONGO_ROOT_USERNAME
           - key: MONGO_ROOT_PASSWORD
             path: admin/MONGO_ROOT_PASSWORD
+           - key: MONGO_USERNAME
+            path: MONGO_USERNAME
+            mode: 0444
+          - key: MONGO_PASSWORD
+            path: MONGO_PASSWORD
+            mode: 0444
+          - key: MONGO_USERS_LIST
+            path: MONGO_USERS_LIST
+            mode: 0444
+      - name: mongodb-scripts
+        configMap:
+          name: mongodb-standalone
+          items:
+          - key: ensure-users.js
+            path: ensure-users.js
+      - name: mongodb-conf
+        configMap:
+          name: mongodb-standalone
+          items:
+          - key: mongo.conf
+            path: mongo.conf
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: sigo-mongo
 ---
 apiVersion: v1
 kind: Service
