@@ -21,7 +21,7 @@ spec:
     metadata:
       labels:
         app: sigo-mongo
-        selector: mongodb-standalone
+        selector: sigo-mongo
     spec:
       containers:
       - name: sigo-mongo
