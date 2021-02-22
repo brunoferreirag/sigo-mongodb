@@ -56,24 +56,23 @@ spec:
             secretKeyRef:
               name: mongodb
               key: mongodb-password
-        - name: MONGO_ROOT_PASSWORD
+        - name: MONGODB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mongodb
               key: mongodb-root-password
         - name: MONGODB_USERNAME
-          value: "sigo-nosql"
+          value: "okteto"
         - name: MONGODB_SYSTEM_LOG_VERBOSITY
           value: "0"
         - name: MONGODB_DISABLE_SYSTEM_LOG
           value: "no"
         - name: MONGODB_DATABASE
-          value: "gestao-normas-industriais"
+          value: "okteto"
         - name: MONGODB_ENABLE_IPV6
           value: "no"
         - name: MONGODB_ENABLE_DIRECTORY_PER_DB
           value: "no"
-  
         ports:
         - name: mongodb
           containerPort: 27017
