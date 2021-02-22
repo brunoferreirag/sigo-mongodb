@@ -10,53 +10,85 @@ data:
   mongodb-root-password: davxDOt67J9O
   mongodb-password: tbYUEcBl2Iri
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: sigo-mongo
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 500Mi
-
----
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: sigo-mongo
+  name: mongodb
+  labels:
+    {{- include "movies.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mongodb
 spec:
+  serviceName: mongodb
+  replicas: 1
   selector:
     matchLabels:
-      app: sigo-mongo
+      app.kubernetes.io/name: mongodb
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: sigo-mongo
+        app.kubernetes.io/name: mongodb
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      securityContext:
+        fsGroup: 1001      
+      initContainers:
       containers:
-        - name: sigo-mongo
-          image: mongo
-          ports:
-            - containerPort: 27017
-          volumeMounts:
-            - name: storage
-              mountPath: /data/db
+      - name: mongodb
+        image: docker.io/bitnami/mongodb:4.0.12-debian-9-r43
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+        env:
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: mongodb-password
+        - name: MONGODB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: mongodb-root-password
+        - name: MONGODB_USERNAME
+          value: "okteto"
+        - name: MONGODB_SYSTEM_LOG_VERBOSITY
+          value: "0"
+        - name: MONGODB_DISABLE_SYSTEM_LOG
+          value: "no"
+        - name: MONGODB_DATABASE
+          value: "okteto"
+        - name: MONGODB_ENABLE_IPV6
+          value: "no"
+        - name: MONGODB_ENABLE_DIRECTORY_PER_DB
+          value: "no"
+        ports:
+        - name: mongodb
+          containerPort: 27017
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/mongodb
+          subPath: 
+        resources:
+          {}
       volumes:
-        - name: storage
-          persistentVolumeClaim:
-            claimName: sigo-mongo
----
+      - name: data
+        emptyDir: {}
+---     
 apiVersion: v1
 kind: Service
 metadata:
-  name: sigo-mongo
+  name: mongodb
+  labels:
+    app.kubernetes.io/component: mongodb
 spec:
-  selector:
-    app: sigo-mongo
+  type: ClusterIP
   ports:
-    - port: 27017
-      targetPort: 27017
+  - name: mongodb
+    port: 27017
+    targetPort: mongodb
+  selector:
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/instance: mongodb
 ---
 
