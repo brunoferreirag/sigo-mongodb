@@ -8,7 +8,7 @@ metadata:
 type: Opaque
 data:
   mongodb-root-password: davxDOt67J9O
-  mongodb-password: tbYUEcBl2Iri
+  mongodb-password: people1*
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -66,7 +66,7 @@ spec:
         - name: MONGODB_SYSTEM_LOG_VERBOSITY
           value: "0"
         - name: MONGODB_DISABLE_SYSTEM_LOG
-          value: "yes"
+          value: "no"
         - name: MONGODB_DATABASE
           value: "okteto"
         - name: MONGODB_ENABLE_IPV6
