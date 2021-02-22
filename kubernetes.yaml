@@ -66,7 +66,7 @@ spec:
         - name: MONGODB_SYSTEM_LOG_VERBOSITY
           value: "0"
         - name: MONGODB_DISABLE_SYSTEM_LOG
-          value: "yes"
+          value: yes
         - name: MONGODB_DATABASE
           value: "okteto"
         - name: MONGODB_ENABLE_IPV6
