@@ -76,28 +76,6 @@ data:
         }
       });
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-    name: sigo-mongo
-spec:
-  capacity:
-    storage: 1Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  local:
-    path: /sigo-mongo
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-            - sigo-mongo
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
