@@ -27,7 +27,6 @@ kind: StatefulSet
 metadata:
   name: mongodb
   labels:
-    {{- include "movies.labels" . | nindent 4 }}
     app.kubernetes.io/component: mongodb
 spec:
   serviceName: mongodb
