@@ -10,21 +10,21 @@ data:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mongodb-standalone
+  name: sigo-mongo
 spec:
-  serviceName: database
+  serviceName: sigo-mongo
   replicas: 1
   selector:
     matchLabels:
-      app: database
+      app: sigo-mongo
   template:
     metadata:
       labels:
-        app: database
+        app: sigo-mongo
         selector: mongodb-standalone
     spec:
       containers:
-      - name: mongodb-standalone
+      - name: sigo-mongo
         image: mongo:4.0.8
         env:
           - name: MONGO_INITDB_ROOT_USERNAME_FILE
@@ -50,11 +50,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: database
+  name: sigo-mongo
   labels:
-    app: database
+    app: sigo-mongo
 spec:
   clusterIP: None
   selector:
-    app: database
+    app: sigo-mongo
 ---
