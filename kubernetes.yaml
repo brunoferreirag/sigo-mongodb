@@ -42,7 +42,7 @@ data:
       .split(';')
       .map(s => s.split(':'))
       .forEach(user => {
-        print(user);
+        print('passou aqui');
 
         const username = user[0];
         const rolesStr = user[1];
