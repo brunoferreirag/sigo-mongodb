@@ -5,7 +5,6 @@ metadata:
   name: mongodb
   labels:
     app.kubernetes.io/component: mongodb
-    {{- include "movies.labels" . | nindent 4 }}
 type: Opaque
 data:
   mongodb-root-password:123456 
