@@ -62,13 +62,13 @@ spec:
               name: mongodb
               key: mongodb-root-password
         - name: MONGODB_USERNAME
-          value: "okteto"
+          value: "sigo-nosql"
         - name: MONGODB_SYSTEM_LOG_VERBOSITY
           value: "0"
         - name: MONGODB_DISABLE_SYSTEM_LOG
           value: "no"
         - name: MONGODB_DATABASE
-          value: "okteto"
+          value: "gestao-normas-industriais"
         - name: MONGODB_ENABLE_IPV6
           value: "no"
         - name: MONGODB_ENABLE_DIRECTORY_PER_DB
