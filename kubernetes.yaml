@@ -10,6 +10,18 @@ data:
   mongodb-root-password: davxDOt67J9O
   mongodb-password: tbYUEcBl2Iri
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
