@@ -42,9 +42,6 @@ spec:
         - name: mongodb-scripts
           mountPath: /docker-entrypoint-initdb.d
           readOnly: true
-        - name: mongodb-conf
-          mountPath: /config
-          readOnly: true
         - name: mongodb-data
           mountPath: /data/db
       volumes:
