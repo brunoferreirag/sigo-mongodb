@@ -7,9 +7,8 @@ metadata:
     app.kubernetes.io/component: mongodb
 type: Opaque
 data:
-  mongodb-root-password: 123456
-  mongodb-password:  123456
-  mongodb-password: 123456
+  mongodb-root-password: hz5CAeG1vnxa
+  mongodb-password: hz5CAeG1vnxa
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
