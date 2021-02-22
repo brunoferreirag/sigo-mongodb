@@ -36,7 +36,7 @@ spec:
           mountPath: /etc/sigo-mongo
           readOnly: true
       nodeSelector:
-        kubernetes.io/hostname: mongodb-node
+        kubernetes.io/hostname: sigo-mongo
       volumes:
       - name: sigo-mongo
         secret:
