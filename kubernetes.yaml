@@ -98,20 +98,6 @@ spec:
           values:
             - sigo-mongo
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: sigo-mongo
-spec:
-  storageClassName: sigo-mongo
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
-  resources:
-    requests:
-      storage: 1Gi
-
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
